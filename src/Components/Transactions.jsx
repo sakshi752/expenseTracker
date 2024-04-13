@@ -10,6 +10,13 @@ const Transactions = () => {
         type="search" name="" id="" 
         placeholder='Search your transactions'/>
       </div>
+
+      <div>
+        <div>
+          <p>Salary</p>
+          <p>$1000</p>
+        </div>
+      </div>
     </div>
   )
 }
