@@ -2,26 +2,33 @@ import React, { useContext, useState } from "react";
 import { ExpenseTrackerContext } from "../store/expenseTracker-store";
 
 const Balance = () => {
-  const [type, setType] = useState("expense");
-  const [toggle, setToggle] = useState(false);
-
-  const handleTypeChange = (e) => {
-    setType(e.target.value);
-  };
-
-  const handleAddClick = () => {
-    setToggle(!toggle);
-  };
-
-  const { theme} = useContext(ExpenseTrackerContext);
-
+  const {
+    theme,
+    toggle,
+    handleAddClick,
+    handleAddTransactions,
+    amount,
+    setAmount,
+    description,
+    setDescription,
+    transactionType,
+    setTransactionType,
+  } = useContext(ExpenseTrackerContext);
+  // const [type, setType] = useState("expense");
+  // const handleTypeChange = (e) => {
+  //   setType(e.target.value);
+  // };
   return (
     <div className="flex flex-col space-y-5">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Balance: $10000</h1>
         <button
           onClick={handleAddClick}
-          className={`bg-gray-900 px-4 py-1 rounded text-white font-semibold  ${theme === "dark" ? "bg-white text-gray-900" : "bg-gray-900 text-white"} `}
+          className={`bg-gray-900 px-4 py-1 rounded font-semibold  ${
+            theme === "dark"
+              ? "bg-white text-gray-900"
+              : "bg-gray-900 text-white"
+          } `}
         >
           {toggle ? "Cancel" : "Add"}
         </button>
@@ -33,11 +40,15 @@ const Balance = () => {
               className="bg-gray-200 rounded px-2 py-1 text-lg text-black outline-none"
               type="number"
               placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
             />
             <input
               className="bg-gray-200 rounded px-2 py-1 text-lg text-black  outline-none"
               type="text"
               placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <div className="flex space-x-5">
               <label className="text-black">
@@ -45,8 +56,8 @@ const Balance = () => {
                   type="radio"
                   name="transactionType"
                   value="expense"
-                  checked={type === "expense"}
-                  onChange={handleTypeChange}
+                  checked={transactionType === "expense"}
+                  onChange={() => setTransactionType("expense")}
                 />
                 Expense
               </label>
@@ -55,8 +66,8 @@ const Balance = () => {
                   type="radio"
                   name="transactionType"
                   value="income"
-                  checked={type === "income"}
-                  onChange={handleTypeChange}
+                  checked={transactionType === "income"}
+                  onChange={() => setTransactionType("income")}
                 />
                 Income
               </label>
@@ -64,6 +75,7 @@ const Balance = () => {
             <button
               className="bg-gray-900 px-4 py-1 rounded text-white font-semibold "
               type="button"
+              onClick={handleAddTransactions}
             >
               Add
             </button>
