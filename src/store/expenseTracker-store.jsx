@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const ExpenseTrackerContext = createContext({});
 
@@ -8,11 +8,22 @@ const ExpenseTrackerContextProvider = ({ children }) => {
   const [toggle, setToggle] = useState(false);
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
-  const [transactionType, setTransactionType] = useState("expense"); 
-  const [transactions,setTransactions]=useState([]);
-  const [balance,setBalance]=useState();
-  const [income,setIncome]=useState();
-  const [expense,setExpense]=useState();
+  const [transactionType, setTransactionType] = useState("expense");
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [expense, setExpense] = useState(0);
+  const [search,setSearch]=useState("");
+
+  useEffect(() => {
+    const storedTransactions = JSON.parse(localStorage.getItem("Transactions"));
+    if (storedTransactions) {
+      setTransactions(storedTransactions);
+      setBalance(JSON.parse(localStorage.getItem("Balance")));
+      setIncome(JSON.parse(localStorage.getItem("Income")));
+      setExpense(JSON.parse(localStorage.getItem("Expense")));
+    }
+  }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -23,25 +34,53 @@ const ExpenseTrackerContextProvider = ({ children }) => {
     if (!toggle) {
       setAmount("");
       setDescription("");
-      setTransactionType("expense"); 
+      setTransactionType("expense");
     }
   };
 
   const handleAddTransactions = () => {
-    // Handle adding transactions here
-    const newTransaction={
-      id:Date.now(),
-      amount,
-      description,
-      type:transactionType,
-      date:new Date().toLocaleDateString()
-    }
-    setTransactions([...transactions,newTransaction]);
-    setAmount("");
-    setDescription("");
-    setTransactionType("expense");
+    const transactionAmount = parseFloat(amount);
+    const newBalance =
+      balance +
+      (transactionType === "income" ? transactionAmount : -transactionAmount);
+    const newIncome =
+      transactionType === "income" ? income + transactionAmount : income;
+    const newExpense =
+      transactionType === "expense" ? expense + transactionAmount : expense;
 
-    console.log(transactions);
+    if (amount !== "" && description !== "" && transactionType !== "") {
+      if (newBalance >= 0) {
+        const newTransaction = {
+          id: Date.now(),
+          amount: transactionAmount,
+          description,
+          type: transactionType,
+          date: new Date().toLocaleDateString(),
+        };
+        setTransactions([...transactions, newTransaction]);
+        setBalance(newBalance);
+        setIncome(newIncome);
+        setExpense(newExpense);
+        setAmount("");
+        setDescription("");
+        setTransactionType("expense");
+        window.localStorage.setItem(
+          "Transactions",
+          JSON.stringify([...transactions, newTransaction])
+        );
+        window.localStorage.setItem("Balance", newBalance);
+        window.localStorage.setItem("Income", newIncome);
+        window.localStorage.setItem("Expense", newExpense);
+      }
+       else {
+        alert("your balance amount is less than your expense");
+        setAmount("");
+        setDescription("");
+        setTransactionType("expense");
+      }
+    } else {
+      alert("please enter all fields");
+    }
   };
 
   return (
@@ -58,7 +97,10 @@ const ExpenseTrackerContextProvider = ({ children }) => {
         setDescription,
         transactionType,
         setTransactionType,
-        transactions
+        transactions,
+        balance,
+        expense,
+        income,
       }}
     >
       {children}

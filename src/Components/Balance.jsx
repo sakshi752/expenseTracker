@@ -13,15 +13,14 @@ const Balance = () => {
     setDescription,
     transactionType,
     setTransactionType,
+    balance,
+    income,
+    expense
   } = useContext(ExpenseTrackerContext);
-  // const [type, setType] = useState("expense");
-  // const handleTypeChange = (e) => {
-  //   setType(e.target.value);
-  // };
   return (
     <div className="flex flex-col space-y-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Balance: $10000</h1>
+        <h1 className="text-xl font-semibold">Balance: ${balance}</h1>
         <button
           onClick={handleAddClick}
           className={`bg-gray-900 px-4 py-1 rounded font-semibold  ${
@@ -41,6 +40,7 @@ const Balance = () => {
               type="number"
               placeholder="Amount"
               value={amount}
+              required
               onChange={(e) => setAmount(e.target.value)}
             />
             <input
@@ -85,11 +85,11 @@ const Balance = () => {
       <div className="flex justify-between space-x-5">
         <div className="flex flex-col bg-gray-200 p-4 rounded shadow-md w-1/2 text-center">
           <p className="text-gray-700    font-semibold text-lg">Income</p>
-          <p className="text-green-500 font-bold">$5000</p>
+          <p className="text-green-500 font-bold">${income}</p>
         </div>
         <div className="flex flex-col bg-gray-200 p-4 rounded shadow-md w-1/2 text-center">
           <p className="text-gray-700 font-semibold text-xl">Expense</p>
-          <p className="text-red-500 font-bold">$800</p>
+          <p className="text-red-500 font-bold">${expense}</p>
         </div>
       </div>
     </div>
