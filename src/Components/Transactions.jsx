@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { ExpenseTrackerContext } from "../store/expenseTracker-store";
+import TransactionCard from "./TransactionCard";
 
 const Transactions = () => {
   const { transactions } = useContext(ExpenseTrackerContext);
@@ -19,13 +20,14 @@ const Transactions = () => {
 
       <div className="flex flex-col space-y-5 mt-5">
         {transactions.map((transaction) => (
-          <div key={transaction.id} className="flex justify-between bg-gray-200 rounded text-gray-900 px-1 py-2">
-            <div>
-              <p className="text-lg font-semibold text-gray-900">{transaction.description}</p>
-              <p className="font-semibold text-gray-900">{transaction.date}</p>
-            </div>
-            <p className="font-semibold text-gray-900">{transaction.amount}</p>
-          </div>
+          <TransactionCard
+            key={transaction.id}
+            id={transaction.id}
+            description={transaction.description}
+            amount={transaction.amount}
+            type={transaction.type}
+            date={transaction.date}
+          />
         ))}
       </div>
     </div>

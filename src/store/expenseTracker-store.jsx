@@ -9,7 +9,10 @@ const ExpenseTrackerContextProvider = ({ children }) => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [transactionType, setTransactionType] = useState("expense"); 
-  const [transactions,setTransactions]=useState([])
+  const [transactions,setTransactions]=useState([]);
+  const [balance,setBalance]=useState();
+  const [income,setIncome]=useState();
+  const [expense,setExpense]=useState();
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
