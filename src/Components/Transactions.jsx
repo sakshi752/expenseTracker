@@ -41,7 +41,7 @@ const Transactions = () => {
       </div>
 
       {transactions.length !== 0 ? (
-        <div className="flex flex-col space-y-5 mt-5">
+        <div className="flex flex-col space-y-5 mt-5 h-[40vh] overflow-y-auto">
           {transactions.map((transaction) => (
             <TransactionCard
               key={transaction.id}
