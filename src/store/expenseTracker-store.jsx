@@ -13,7 +13,7 @@ const ExpenseTrackerContextProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [income, setIncome] = useState(0);
   const [expense, setExpense] = useState(0);
-  const [search,setSearch]=useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const storedTransactions = JSON.parse(localStorage.getItem("Transactions"));
@@ -72,7 +72,7 @@ const ExpenseTrackerContextProvider = ({ children }) => {
         window.localStorage.setItem("Income", newIncome);
         window.localStorage.setItem("Expense", newExpense);
       }
-       else {
+      else {
         alert("your balance amount is less than your expense");
         setAmount("");
         setDescription("");
@@ -81,6 +81,30 @@ const ExpenseTrackerContextProvider = ({ children }) => {
     } else {
       alert("please enter all fields");
     }
+  };
+
+  const handleSearch = () => {
+    const filteredTransactions = transactions.filter((transaction) =>
+      transaction.description.toLowerCase().includes(search.toLowerCase())
+    );
+    setTransactions(filteredTransactions);
+  };
+  
+  const handleAll = () => {
+    const storedTransactions = JSON.parse(localStorage.getItem("Transactions"));
+    setTransactions(storedTransactions || []);
+    setSearch("");
+  };
+  const clearTransactions = () => {
+    setTransactions([]);
+    setBalance(0)
+    setExpense(0)
+    setIncome(0)
+    window.localStorage.setItem("Transactions", JSON.stringify([]));
+
+    window.localStorage.setItem("Balance", 0);
+    window.localStorage.setItem("Income", 0);
+    window.localStorage.setItem("Expense", 0);
   };
 
   return (
@@ -101,6 +125,11 @@ const ExpenseTrackerContextProvider = ({ children }) => {
         balance,
         expense,
         income,
+        search,
+        setSearch,
+        handleSearch,
+        handleAll,
+        clearTransactions
       }}
     >
       {children}
